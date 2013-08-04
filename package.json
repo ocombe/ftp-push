@@ -1,0 +1,21 @@
+{
+	"name": "ftp-push",
+	"version": "0.0.1",
+	"description": "A CLI program to push local files &amp; folders to a remote FTP",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ocombe/ftp-push"
+	},
+	"author": "Olivier Combe <olivier.combe@gmail.com> (https://github.com/ocombe)",
+	"license": "BSD",
+	"dependencies": {
+		"commander": "~2.0.0",
+		"ftp": "~0.3.3",
+		"wrench": "~1.5.1",
+		"async": "~0.2.9"
+	}
+}
