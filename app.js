@@ -3,8 +3,8 @@
 var program = require('commander');
 
 program
-	.version('0.0.1')
-	.usage('node .\app.js -pr -h myhost.com -u MyUserName -w MyPasswd -s "C:\localSourceFileOrFolder" -d "/home/RemoteFolder"')
+	.version('0.0.2')
+	.usage('-pr -h myhost.com -u MyUserName -w MyPasswd -s "C:\localSourceFileOrFolder" -d "/home/RemoteFolder"')
 	.option('-h, --host [host]', 'Host')
 	.option('-o, --port [port]', 'Port', 21)
 	.option('-u, --user [user]', 'User')
