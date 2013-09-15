@@ -29,47 +29,48 @@ if(program.host && program.user && program.password && program.put && program.so
 
 	var ftp = new FTPClient();
 	ftp.on('ready', function() {
+		var basePath = pJoin(program.destination, path.basename(program.source));
 		fs.stat(program.source, function(err, stats) {
 			if(err) {
 				throw err;
 			} else if(!err && stats.isDirectory()) {
-				if(program.recursive) {
-					async.mapSeries(wrench.readdirSyncRecursive(program.source), function(file, callback) {
-						fs.stat(pJoin(program.source, file), function(err, stats) {
+				ftp.mkdir(basePath, true, function(err) {
+					if(err) {
+						throw err;
+					}
+					if(program.recursive) {
+						async.mapSeries(wrench.readdirSyncRecursive(program.source), function(file, callback) {
+							fs.stat(pJoin(program.source, file), function(err, stats) {
+								if(err) {
+									throw err;
+								} else if(!err && stats.isDirectory()) {
+									ftp.mkdir(pJoin(basePath, file), true, callback);
+								} else {
+									ftp.put(pJoin(program.source, file), pJoin(basePath, file), callback);
+								}
+							});
+						}, function(err, res) {
 							if(err) {
 								throw err;
-							} else if(!err && stats.isDirectory()) {
-								ftp.mkdir(pJoin(program.destination, file), true, callback);
-							} else {
-								ftp.put(pJoin(program.source, file), pJoin(program.destination, file), callback);
 							}
+							console.log("Folder transferred successfully!");
+							if(program.clean) {
+								wrench.rmdirSyncRecursive(program.source);
+								console.log('Local folder deleted successfully');
+							}
+							ftp.end();
 						});
-					}, function(err, res) {
-						if(err) {
-							throw err;
-						}
+					} else {
 						console.log("Folder transferred successfully!");
 						if(program.clean) {
 							wrench.rmdirSyncRecursive(program.source);
 							console.log('Local folder deleted successfully');
 						}
 						ftp.end();
-					});
-				} else {
-					ftp.mkdir(pJoin(program.destination, path.basename(program.source)), true, function(err) {
-						if(err) {
-							throw err;
-						}
-						console.log("Folder transferred successfully!");
-						if(program.clean) {
-							wrench.rmdirSyncRecursive(program.source);
-							console.log('Local folder deleted successfully');
-						}
-						ftp.end();
-					});
-				}
+					}
+				});
 			} else {
-				ftp[program.put ? 'put' : 'get'](program.source, pJoin(program.destination, path.basename(program.source)), function(err) {
+				ftp[program.put ? 'put' : 'get'](program.source, basePath, function(err) {
 					if(err) {
 						throw err;
 					}
