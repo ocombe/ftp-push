@@ -15,8 +15,8 @@ A CLI program to push local files &amp; folders to a remote FTP
 3. Use the program with a command line :
 
 
-	```
-	node .app.js -pr -h host.com -u UserName -w Passwd -s "C:\FileOrFolder" -d "/home/RemoteFolder"
+	```sh
+	node app.js -pr -h host.com -u UserName -w Passwd -s "C:\FileOrFolder" -d "/home/RemoteFolder"
 	```
 
 	Options:
